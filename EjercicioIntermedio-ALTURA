@@ -1,0 +1,91 @@
+public class ArbolAltura {
+
+    class Nodo {
+        int dato;
+        Nodo izq, der;
+
+        public Nodo(int dato) {
+            this.dato = dato;
+            this.izq = null;
+            this.der = null;
+        }
+    }
+
+    Nodo raiz;
+
+    
+    // -----------------------------------------------------
+
+
+    public ArbolAltura(){
+        raiz = null;
+    }
+
+    public void insertar(int dato){
+        raiz = insertarRec(raiz, dato);
+    }
+    
+    public Nodo insertarRec(Nodo raiz, int dato){
+        if (raiz == null) {
+            raiz = new Nodo(dato);
+            return raiz;
+        }
+
+        if (dato < raiz.dato) {
+            raiz.izq = insertarRec(raiz.izq, dato);
+        }
+
+        else if (dato > raiz.dato) {
+            raiz.der = insertarRec(raiz.der, dato);
+        }
+
+        return raiz;
+    }
+
+    
+    // -----------------------------------------------------
+
+    public int altura(Nodo nodo){
+        if (nodo == null){
+            return 0; //si esta vacio, la altura es 0
+        }
+
+        //calculo de altura en ambos lados
+        int alturaIzq = altura(nodo.izq);
+        int alturaDer = altura(nodo.der);
+
+        if (alturaIzq>alturaDer){
+            int alturaFin=alturaIzq;
+            return 1 + alturaFin;
+        } else {
+            int alturaFin=alturaDer;
+            return 1 + alturaFin;
+        }
+
+        //return 1 + Math.max(alturaIzq,alturaDer);  --> otra forma de hacerlo
+    }    
+
+    // -----------------------------------------------------
+
+    public static void main(String[]ar){
+        ArbolAltura arbol = new ArbolAltura();
+        arbol.insertar(25);
+        arbol.insertar(15);
+        arbol.insertar(50);
+        arbol.insertar(10);
+        arbol.insertar(22);
+        arbol.insertar(35);
+        arbol.insertar(70);
+        arbol.insertar(4);
+        arbol.insertar(12);
+        arbol.insertar(18);
+        arbol.insertar(24);
+        arbol.insertar(31);
+        arbol.insertar(44);
+        arbol.insertar(66);
+        arbol.insertar(90);
+
+        int altura = arbol.altura(arbol.raiz);
+        System.out.println("La altura del árbol es: " + altura);
+    }
+}
