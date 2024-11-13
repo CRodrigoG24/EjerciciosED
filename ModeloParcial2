@@ -1,0 +1,136 @@
+public class ArbolBinario3 {
+    class Nodo {
+        int info;
+        Nodo izq, der;
+    }
+
+    Nodo raiz;
+
+    public ArbolBinario3() {
+        raiz = null;
+    }
+
+    // 1. Método para insertar un nodo en el árbol binario
+    public void insertar(int info) {
+        Nodo nuevo = new Nodo();
+        nuevo.info = info;
+        nuevo.izq = null;
+        nuevo.der = null;
+
+        if (raiz == null) {
+            raiz = nuevo; // Si el árbol está vacío, el nuevo nodo es la raíz
+        } else {
+            Nodo reco = raiz;
+            Nodo anterior = null;
+
+            while (reco != null) {
+                anterior = reco;
+                if (info < reco.info)
+                    reco = reco.izq; // Desciende por el subárbol izquierdo
+                else
+                    reco = reco.der; // Desciende por el subárbol derecho
+            }
+
+            // Inserta el nuevo nodo en la posición correspondiente
+            if (info < anterior.info)
+                anterior.izq = nuevo;
+            else
+                anterior.der = nuevo;
+        }
+    }
+
+    // 2. Método para buscar el menor valor en el subárbol derecho
+    public void menorValorDerecha() {
+        if (raiz != null && raiz.der != null) {
+            Nodo reco = raiz.der; // Comienza en el subárbol derecho
+            while (reco.izq != null) { // Baja hasta el menor valor
+                reco = reco.izq;
+            }
+            System.out.println("Menor valor en el subárbol derecho: " + reco.info);
+        } else {
+            System.out.println("No hay subárbol derecho o el árbol está vacío.");
+        }
+    }
+
+    // 3. Método para buscar el mayor valor en el subárbol izquierdo
+    public void mayorValorIzquierda() {
+        if (raiz != null && raiz.izq != null) {
+            Nodo reco = raiz.izq; // Comienza en el subárbol izquierdo
+            while (reco.der != null) { // Baja hasta el mayor valor
+                reco = reco.der;
+            }
+            System.out.println("Mayor valor en el subárbol izquierdo: " + reco.info);
+        } else {
+            System.out.println("No hay subárbol izquierdo o el árbol está vacío.");
+        }
+    }
+
+    // 4. Método para buscar un valor en el árbol y mostrar el nivel en el que se encuentra
+    public void existeValorEnNivel(int info) {
+        int nivel = existeValorEnNivel(raiz, info, 1); // Llama al método recursivo
+        if (nivel == -1) {
+            System.out.println("El valor " + info + " no se encuentra en el árbol.");
+        } else {
+            System.out.println("El valor " + info + " se encuentra en el nivel " + nivel);
+        }
+    }
+
+    // Método recursivo para buscar el valor y el nivel
+    private int existeValorEnNivel(Nodo reco, int info, int nivel) {
+        if (reco == null) return -1; // No se encuentra el valor
+        if (reco.info == info) return nivel; // Se encontró el valor
+
+        int nivelIzq = existeValorEnNivel(reco.izq, info, nivel + 1);
+        if (nivelIzq != -1) return nivelIzq; // Si se encontró en el subárbol izquierdo
+
+        return existeValorEnNivel(reco.der, info, nivel + 1); // Si no, busca en el subárbol derecho
+    }
+
+    // 5. Método para calcular la altura del árbol
+    public void nivelArbol() {
+        int altura = nivelArbol(raiz); // Llama al método recursivo
+        System.out.println("La altura del árbol es: " + altura);
+    }
+
+    // Método recursivo para calcular la altura
+    private int nivelArbol(Nodo reco) {
+        if (reco == null) return 0; // Si el nodo es nulo, no cuenta
+        int alturaIzq = nivelArbol(reco.izq); // Calcula la altura del subárbol izquierdo
+        int alturaDer = nivelArbol(reco.der); // Calcula la altura del subárbol derecho
+        return Math.max(alturaIzq, alturaDer) + 1; // La altura es la mayor de las dos ramas más 1
+    }
+
+    // 6. Método para contar los nodos hoja
+    public void cantidadHojas() {
+        int cantidad = cantidadHojas(raiz); // Llama al método recursivo
+        System.out.println("Cantidad de nodos hoja: " + cantidad);
+    }
+
+    // Método recursivo para contar los nodos hoja
+    private int cantidadHojas(Nodo reco) {
+        if (reco == null) return 0; // Si el nodo es nulo, no cuenta
+        if (reco.izq == null && reco.der == null) return 1; // Si es hoja, cuenta
+        return cantidadHojas(reco.izq) + cantidadHojas(reco.der); // Suma las hojas en ambos subárboles
+    }
+
+    // Método principal para probar la clase
+    public static void main(String[] args) {
+        ArbolBinario3 arbol = new ArbolBinario3();
+
+        // Insertar nodos
+        arbol.insertar(50);
+        arbol.insertar(30);
+        arbol.insertar(70);
+        arbol.insertar(20);
+        arbol.insertar(40);
+        arbol.insertar(60);
+        arbol.insertar(80);
+
+        // Métodos de prueba
+        arbol.menorValorDerecha(); // Busca el menor valor en el subárbol derecho
+        arbol.mayorValorIzquierda(); // Busca el mayor valor en el subárbol izquierdo
+        arbol.existeValorEnNivel(40); // Busca el valor 40 y muestra el nivel
+        arbol.nivelArbol(); // Muestra la altura del árbol
+        arbol.cantidadHojas(); // Muestra la cantidad de nodos hoja
+    }
+}
