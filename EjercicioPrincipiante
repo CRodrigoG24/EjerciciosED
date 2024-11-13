@@ -32,7 +32,6 @@ public class ArbolBinario2 {
 
         if (dato < raiz.dato) {
             raiz.izq = insertarRec(raiz.izq, dato);
-            return raiz;
         }
 
         else if (dato > raiz.dato) {
