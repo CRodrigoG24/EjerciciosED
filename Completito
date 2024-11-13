@@ -1,0 +1,207 @@
+public class ArbolBinarioOrdenado2 {
+    class Nodo {
+        int info;
+        Nodo izq, der;
+    }
+
+    Nodo raiz;
+    int cant;
+    int altura;
+
+    public ArbolBinarioOrdenado2() {
+        raiz = null;
+    }
+
+    // Método para insertar un nodo en el árbol, verificando que no exista previamente
+    public void insertar(int info) {
+        if (!existe(info)) {
+            Nodo nuevo = new Nodo();
+            nuevo.info = info;
+            nuevo.izq = null;
+            nuevo.der = null;
+            if (raiz == null)
+                raiz = nuevo;
+            else {
+                Nodo anterior = null, reco;
+                reco = raiz;
+                while (reco != null) {
+                    anterior = reco;
+                    if (info < reco.info)
+                        reco = reco.izq;
+                    else
+                        reco = reco.der;
+                }
+                if (info < anterior.info)
+                    anterior.izq = nuevo;
+                else
+                    anterior.der = nuevo;
+            }
+        }
+    }
+
+    // Método para verificar si el nodo existe
+    public boolean existe(int info) {
+        Nodo reco = raiz;
+        while (reco != null) {
+            if (info == reco.info)
+                return true;
+            else if (info > reco.info)
+                reco = reco.der;
+            else
+                reco = reco.izq;
+        }
+        return false;
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 1. Suma de todos los nodos
+    private int sumaNodos(Nodo reco) {
+        if (reco == null)
+            return 0;
+        return reco.info + sumaNodos(reco.izq) + sumaNodos(reco.der); // Suma el nodo y sus subárboles
+    }
+
+    public int sumaNodos() {
+        return sumaNodos(raiz);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 2. Buscar el valor mínimo
+    public int buscarMinimo() {
+        if (raiz == null) return -1; // Retorna -1 si el árbol está vacío
+        Nodo reco = raiz;
+        while (reco.izq != null) { // Desciende por el subárbol izquierdo
+            reco = reco.izq;
+        }
+        return reco.info; // Retorna el valor del nodo más a la izquierda
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 3. Buscar el valor máximo
+    public int buscarMaximo() {
+        if (raiz == null) return -1; // Retorna -1 si el árbol está vacío
+        Nodo reco = raiz;
+        while (reco.der != null) { // Desciende por el subárbol derecho
+            reco = reco.der;
+        }
+        return reco.info; // Retorna el valor del nodo más a la derecha
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 4. Contar nodos en un nivel específico
+    private int contarNodosNivel(Nodo reco, int nivel, int nivelBuscado) {
+        if (reco == null) return 0;
+        if (nivel == nivelBuscado) return 1; // Si estamos en el nivel buscado, contamos el nodo
+        return contarNodosNivel(reco.izq, nivel + 1, nivelBuscado) + contarNodosNivel(reco.der, nivel + 1, nivelBuscado);
+    }
+
+    public int contarNodosNivel(int nivel) {
+        return contarNodosNivel(raiz, 1, nivel);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 5. Imprimir los nodos en preorden junto al nivel
+    private void imprimirPreordenConNivel(Nodo reco, int nivel) {
+        if (reco != null) {
+            System.out.print(reco.info + " (Nivel " + nivel + ") ");
+            imprimirPreordenConNivel(reco.izq, nivel + 1); // Recorre subárbol izquierdo
+            imprimirPreordenConNivel(reco.der, nivel + 1); // Recorre subárbol derecho
+        }
+    }
+
+    public void imprimirPreordenConNivel() {
+        imprimirPreordenConNivel(raiz, 1);
+        System.out.println();
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 6. Sumar valores de nodos en hojas
+    private int sumarNodosHoja(Nodo reco) {
+        if (reco == null)
+            return 0;
+        if (reco.izq == null && reco.der == null) // Si es una hoja
+            return reco.info;
+        return sumarNodosHoja(reco.izq) + sumarNodosHoja(reco.der); // Suma los valores de las hojas
+    }
+
+    public int sumarNodosHoja() {
+        return sumarNodosHoja(raiz);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 7. Contar nodos internos
+    private int contarNodosInternos(Nodo reco) {
+        if (reco == null || (reco.izq == null && reco.der == null))
+            return 0;
+        return 1 + contarNodosInternos(reco.izq) + contarNodosInternos(reco.der); // Cuenta nodos internos
+    }
+
+    public int contarNodosInternos() {
+        return contarNodosInternos(raiz);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 8. Sumar valores de nodos internos
+    private int sumarNodosInternos(Nodo reco) {
+        if (reco == null || (reco.izq == null && reco.der == null)) // Si es hoja, no sumar
+            return 0;
+        return reco.info + sumarNodosInternos(reco.izq) + sumarNodosInternos(reco.der); // Suma los valores de los nodos internos
+    }
+
+    public int sumarNodosInternos() {
+        return sumarNodosInternos(raiz);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // 9. Eliminar nodos hoja
+    private Nodo eliminarHojas(Nodo reco) {
+        if (reco == null) return null;
+        if (reco.izq == null && reco.der == null) return null; // Si es una hoja, la eliminamos
+        reco.izq = eliminarHojas(reco.izq); // Elimina hojas del subárbol izquierdo
+        reco.der = eliminarHojas(reco.der); // Elimina hojas del subárbol derecho
+        return reco; // Retorna el nodo modificado
+    }
+
+    public void eliminarHojas() {
+        raiz = eliminarHojas(raiz); // Llama al método recursivo para eliminar las hojas
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    // Método principal para probar la clase
+    public static void main(String[] args) {
+        ArbolBinarioOrdenado2 abo = new ArbolBinarioOrdenado2();
+        abo.insertar(100);
+        abo.insertar(50);
+        abo.insertar(25);
+        abo.insertar(75);
+        abo.insertar(150);
+        abo.insertar(30);
+        abo.insertar(120);
+
+        System.out.println("Suma de todos los nodos: " + abo.sumaNodos());
+        System.out.println("Valor mínimo del árbol: " + abo.buscarMinimo());
+        System.out.println("Valor máximo del árbol: " + abo.buscarMaximo());
+
+        System.out.println("Suma de los valores de los nodos internos: " + abo.sumarNodosInternos());
+        System.out.println("Cantidad de nodos en el nivel 2: " + abo.contarNodosNivel(2));
+        System.out.println("Impresión en preorden junto al nivel del nodo:");
+        abo.imprimirPreordenConNivel();
+
+        System.out.println("Suma de los valores de los nodos hoja: " + abo.sumarNodosHoja());
+        System.out.println("Cantidad de nodos internos: " + abo.contarNodosInternos());
+
+        abo.eliminarHojas();
+        System.out.println("Luego de eliminar las hojas:");
+        abo.imprimirPreordenConNivel();
+    }
+}
