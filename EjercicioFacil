@@ -1,0 +1,92 @@
+public class ArbolHojas {
+
+    class Nodo {
+        int dato;
+        Nodo izq, der;
+
+        public Nodo(int dato) {
+            this.dato = dato;
+            this.izq = null;
+            this.der = null;
+        }
+    }
+
+    Nodo raiz;
+
+    // -----------------------------------------------------
+
+    public ArbolHojas() {
+        raiz = null;
+    }
+
+    public void insertar(int dato) {
+        raiz = insertarRec(raiz, dato);
+    }
+
+    public Nodo insertarRec(Nodo raiz, int dato) {
+        if (raiz == null) {
+            raiz = new Nodo(dato);
+            return raiz;
+        }
+
+        if (dato < raiz.dato) {
+            raiz.izq = insertarRec(raiz.izq, dato);
+        }
+
+        else if (dato > raiz.dato) {
+            raiz.der = insertarRec(raiz.der, dato);
+        }
+
+        return raiz;
+    }
+
+    // -----------------------------------------------------
+
+    // Metodo contar hojas
+    public int contarHojas(Nodo nodo) {
+        if (nodo == null) {
+            return 0;
+        }
+
+        if (nodo.izq == null && nodo.der == null) {
+            return 1;
+        }
+
+        return contarHojas(nodo.izq) + contarHojas(nodo.der);
+    }
+
+    public int contarNodosInternos(Nodo nodo) {
+        if (nodo == null) {
+            return 0;
+        }
+
+        if (nodo.izq != null || nodo.der != null) {
+            return 1 + contarNodosInternos(nodo.izq) + contarNodosInternos(nodo.der);
+        }
+
+        return 0;
+    }
+
+    // -----------------------------------------------------
+
+    public static void main(String[] ar) {
+
+        ArbolHojas arbol = new ArbolHojas();
+        arbol.insertar(10);
+        arbol.insertar(5);
+        arbol.insertar(15);
+        arbol.insertar(3);
+        arbol.insertar(7);
+        arbol.insertar(13);
+        arbol.insertar(17);
+
+        // Contar y mostrar num de hojas
+        int hojas = arbol.contarHojas(arbol.raiz);
+        System.out.println("Hojas: " + hojas);
+
+        // Contar y mostrar nodos internos
+        int internos = arbol.contarNodosInternos(arbol.raiz);
+        System.out.println("Nodos Internos: " + internos);
+
+    }
+}
