@@ -1,0 +1,69 @@
+public class ArbolBinario2 {
+
+    class Nodo {
+        int dato;
+        Nodo izq, der;
+
+        public Nodo(int dato) {
+            this.dato = dato;
+            this.izq = null;
+            this.der = null;
+        }
+    }
+
+    Nodo raiz;
+
+    public ArbolBinario2() {
+        raiz = null;
+    }
+
+    // ---------------------------------------------------------------
+
+    public void insertar(int dato) {
+        raiz = insertarRec(raiz, dato);
+    }
+
+    public Nodo insertarRec(Nodo raiz, int dato) {
+
+        if (raiz == null) {
+            raiz = new Nodo(dato);
+            return raiz;
+        }
+
+        if (dato < raiz.dato) {
+            raiz.izq = insertarRec(raiz.izq, dato);
+            return raiz;
+        }
+
+        else if (dato > raiz.dato) {
+            raiz.der = insertarRec(raiz.der, dato);
+        }
+        return raiz;
+    }
+
+    // ---------------------------------------------------------------
+
+    public void entreorden(Nodo nodo) {
+        if (nodo != null) {
+            entreorden(nodo.izq);
+            System.out.print(nodo.dato + " - ");
+            entreorden(nodo.der);
+        }
+    }
+
+    // ---------------------------------------------------------------
+
+    public void main(String[] ar) {
+        ArbolBinario2 arbol = new ArbolBinario2();
+        arbol.insertar(50);
+        arbol.insertar(30);
+        arbol.insertar(70);
+        arbol.insertar(20);
+        arbol.insertar(40);
+        arbol.insertar(60);
+        arbol.insertar(80);
+
+        arbol.entreorden(arbol.raiz);
+
+    }
+}
